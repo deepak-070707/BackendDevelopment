@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ECE8DC;
+    --surface: #FBF9F2;
+    --surface-raised: #FFFFFF;
+    --ink: #24291F;
+    --ink-soft: #52503F;
+    --muted: #7B7768;
+    --line: #D9D3C1;
+    --accent: #8A6A1F;
+    --accent-ink: #FFFFFF;
+    --accent-soft: #E4D6AE;
+    --good: #3F5E40;
+    --good-soft: #DCE6D5;
+    --danger: #96412B;
+    --danger-soft: #F1DAD1;
+    --shadow: 0 1px 2px rgba(36,41,31,0.06), 0 4px 14px rgba(36,41,31,0.06);
+    --radius: 3px;
+  }
+
+  html[data-theme="dark"] {
+    --bg: #1A1C16;
+    --surface: #23261D;
+    --surface-raised: #2A2D22;
+    --ink: #ECE7D6;
+    --ink-soft: #C5C0AC;
+    --muted: #8D8972;
+    --line: #3A3C30;
+    --accent: #D4AF37;
+    --accent-ink: #1A1C16;
+    --accent-soft: #3D3620;
+    --good: #7CA97D;
+    --good-soft: #2A3626;
+    --danger: #D6816A;
+    --danger-soft: #3A2620;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 18px rgba(0,0,0,0.25);
+  }
+
+  * { box-sizing: border-box; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px);
+    background-size: 100% 32px;
+    background-attachment: local;
+  }
+
+  html[data-theme="dark"] body { background-image: linear-gradient(var(--line) 1px, transparent 1px); background-size: 100% 32px; opacity: 1; }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 20px 100px;
+  }
+
+  header.top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    gap: 16px;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 32px;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .tally {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
+    flex-shrink: 0;
+  }
+  .icon-btn:hover { background: var(--surface-raised); border-color: var(--accent); color: var(--accent); }
+  .icon-btn:active { transform: scale(0.94); }
+  .icon-btn svg { width: 16px; height: 16px; }
+  .icon-btn:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Composer */
+  .composer {
+    background: var(--surface-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px 18px 14px;
+    margin-bottom: 22px;
+    position: relative;
+  }
+  .composer::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 22px;
+    width: 34px; height: 3px;
+    background: var(--accent);
+    border-radius: 0 0 3px 3px;
+  }
+  .composer textarea {
+    width: 100%;
+    border: none;
+    resize: none;
+    background: transparent;
+    color: var(--ink);
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 6px 0 2px;
+    min-height: 44px;
+    font-weight: 400;
+  }
+  .composer textarea::placeholder { color: var(--muted); }
+  .composer textarea:focus { outline: none; }
+
+  .composer-row2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .tag-input {
+    flex: 1;
+    min-width: 140px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    padding: 7px 10px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .tag-input::placeholder { color: var(--muted); }
+  .btn {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-ghost { background: transparent; border-color: var(--line); color: var(--ink-soft); }
+  .btn-ghost:hover { border-color: var(--ink-soft); }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-danger:hover { opacity: 0.88; }
+  .btn-sm { padding: 5px 11px; font-size: 12.5px; }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .search-box {
+    position: relative;
+    flex: 1;
+    min-width: 160px;
+  }
+  .search-box svg {
+    position: absolute;
+    left: 10px; top: 50%;
+    transform: translateY(-50%);
+    width: 14px; height: 14px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+  .search-box input {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 8px 10px 8px 30px;
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 13.5px;
+    color: var(--ink);
+  }
+  .search-box input::placeholder { color: var(--muted); }
+
+  .filters {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 2px;
+  }
+  .filters button {
+    border: none;
+    background: transparent;
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--muted);
+    padding: 6px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .filters button.active { background: var(--accent-soft); color: var(--accent); }
+
+  .tag-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0 18px;
+  }
+  .tag-chip {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    padding: 4px 9px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .tag-chip.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .tag-chip .n { color: var(--muted); margin-left: 3px; }
+  .tag-chip.active .n { color: var(--accent-ink); opacity: 0.8; }
+
+  .reorder-hint {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin: 2px 0 16px;
+  }
+
+  /* List */
+  #list { display: flex; flex-direction: column; gap: 10px; }
+
+  .note {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--line);
+    border-radius: var(--radius);
+    padding: 13px 14px 12px 12px;
+    display: flex;
+    gap: 10px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .note.completed { border-left-color: var(--good); }
+  .note.dragging { opacity: 0.4; }
+  .note.drag-over { box-shadow: inset 0 2px 0 var(--accent); }
+
+  .note .grip {
+    cursor: grab;
+    color: var(--line);
+    display: flex;
+    align-items: center;
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+  .note .grip:hover { color: var(--muted); }
+  .note .grip svg { width: 12px; height: 16px; }
+  .note[data-locked="true"] .grip { visibility: hidden; }
+
+  .check-btn {
+    width: 19px; height: 19px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line);
+    background: var(--surface-raised);
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+  .check-btn svg { width: 11px; height: 11px; opacity: 0; color: #fff; }
+  .note.completed .check-btn { background: var(--good); border-color: var(--good); }
+  .note.completed .check-btn svg { opacity: 1; }
+
+  .note-body { flex: 1; min-width: 0; }
+  .note-text {
+    font-size: 14.5px;
+    color: var(--ink);
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0 0 6px;
+  }
+  .note.completed .note-text { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+
+  .note-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .note-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+  .note-tags span {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    padding: 2px 7px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 10px;
+  }
+  .note-time {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .note-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+
+  .confirm-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  /* Edit mode */
+  .note.editing .note-text-display,
+  .note.editing .note-meta-display { display: none; }
+  .edit-area {
+    width: 100%;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--surface-raised);
+    padding: 7px 9px;
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 14.5px;
+    color: var(--ink);
+    resize: vertical;
+    min-height: 50px;
+  }
+  .edit-tags {
+    width: 100%;
+    margin-top: 7px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface-raised);
+    padding: 6px 9px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .edit-actions { display: flex; gap: 8px; margin-top: 8px; }
+
+  .empty {
+    text-align: center;
+    padding: 56px 20px;
+    color: var(--muted);
+  }
+  .empty .glyph {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 26px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .empty p { font-size: 13.5px; margin: 0; }
+
+  footer.app-footer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+  }
+
+  .storage-banner {
+    display: none;
+    background: var(--danger-soft);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    font-size: 12.5px;
+    margin-bottom: 18px;
+  }
+  .storage-banner.show { display: block; }
+
+  .toast {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--ink);
+    color: var(--bg);
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+  .toast button {
+    background: none; border: none; color: var(--accent);
+    font-family: "IBM Plex Sans"; font-size: 13px; font-weight: 600;
+    cursor: pointer; padding: 0;
+  }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 26px; }
+    .wrap { padding: 28px 14px 90px; }
+    .note-actions { align-self: center; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>Memora Notes...</h1>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span class="tally" id="tally"></span>
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark / light">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="storage-banner" id="storageBanner">
+    This preview can't save to your browser's storage, so notes will reset if you leave. Download the file and open it directly in your browser to keep your notes.
+  </div>
+
+  <div class="composer">
+    <textarea id="noteInput" placeholder="Write a note..." rows="2"></textarea>
+    <div class="composer-row2">
+      <input type="text" class="tag-input" id="tagInput" placeholder="tags, comma, separated (optional)">
+      <button class="btn btn-primary" id="addBtn" disabled>Add note</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" id="searchInput" placeholder="Search notes and tags">
+    </div>
+    <div class="filters">
+      <button data-filter="all" class="active">All</button>
+      <button data-filter="active">Active</button>
+      <button data-filter="completed">Done</button>
+    </div>
+  </div>
+
+  <div class="tag-filter-row" id="tagFilterRow"></div>
+  <div class="reorder-hint" id="reorderHint">Drag the handle to reorder — available when showing all notes.</div>
+
+  <div id="list"></div>
+  <div class="empty" id="emptyState" style="display:none;">
+    <div class="glyph">Nothing here yet</div>
+    <p>Write your first note to begin with.</p>
+  </div>
+
+  <footer class="app-footer">
+    <button class="btn btn-ghost btn-sm" id="exportBtn">Export as JSON</button>
+    <button class="btn btn-ghost btn-sm" id="importBtn">Import JSON</button>
+    <input type="file" id="importFile" accept="application/json" style="display:none;">
+  </footer>
+
+</div>
+
+<div class="toast" id="toast">
+  <span id="toastMsg"></span>
+  <button id="toastAction" style="display:none;"></button>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "field-notes:data";
+  var THEME_KEY = "field-notes:theme";
+  var memoryFallback = null; // used if localStorage is unavailable
+  var storageOK = true;
+
+  function storageAvailable() {
+    try {
+      var t = "__t__";
+      window.localStorage.setItem(t, t);
+      window.localStorage.removeItem(t);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  storageOK = storageAvailable();
+  if (!storageOK) {
+    document.getElementById("storageBanner").classList.add("show");
+  }
+
+  function uid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "id-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+  }
+
+  function loadNotes() {
+    if (!storageOK) return memoryFallback || [];
+    try {
+      var raw = window.localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveNotes(notes) {
+    if (!storageOK) { memoryFallback = notes; return; }
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+    } catch (e) {
+      // storage full or blocked mid-session — fall back silently
+      storageOK = false;
+      memoryFallback = notes;
+      document.getElementById("storageBanner").classList.add("show");
+    }
+  }
+
+  function loadTheme() {
+    var saved = null;
+    try { saved = window.localStorage.getItem(THEME_KEY); } catch (e) {}
+    if (saved) return saved;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+
+  function saveTheme(theme) {
+    try { window.localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+  }
+
+  // ---- state ----
+  var state = {
+    notes: loadNotes(),
+    filter: "all",
+    search: "",
+    activeTag: null,
+    editingId: null,
+    pendingDeleteId: null,
+    dragId: null
+  };
+
+  // ---- theme ----
+  var moonPath = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  var sunPath = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    document.getElementById("themeIcon").innerHTML = theme === "dark" ? moonPath : sunPath;
+  }
+  var currentTheme = loadTheme();
+  applyTheme(currentTheme);
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    currentTheme = currentTheme === "dark" ? "light" : "dark";
+    applyTheme(currentTheme);
+    saveTheme(currentTheme);
+  });
+
+  // ---- helpers ----
+  function parseTags(str) {
+    if (!str) return [];
+    var seen = {};
+    return str.split(",").map(function (t) { return t.trim(); }).filter(function (t) {
+      if (!t) return false;
+      var key = t.toLowerCase();
+      if (seen[key]) return false;
+      seen[key] = true;
+      return true;
+    });
+  }
+
+  function fmtTime(iso) {
+    var d = new Date(iso);
+    return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+  }
+
+  function escapeHtml(s) {
+    var div = document.createElement("div");
+    div.textContent = s;
+    return div.innerHTML;
+  }
+
+  function showToast(msg, actionLabel, actionFn) {
+    var toast = document.getElementById("toast");
+    var msgEl = document.getElementById("toastMsg");
+    var actionEl = document.getElementById("toastAction");
+    msgEl.textContent = msg;
+    if (actionLabel) {
+      actionEl.style.display = "inline";
+      actionEl.textContent = actionLabel;
+      actionEl.onclick = function () { actionFn(); hideToast(); };
+    } else {
+      actionEl.style.display = "none";
+    }
+    toast.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(hideToast, 4200);
+  }
+  function hideToast() { document.getElementById("toast").classList.remove("show"); }
+
+  // ---- mutations ----
+  function addNote(text, tagsStr) {
+    var now = new Date().toISOString();
+    var note = {
+      id: uid(),
+      text: text.trim(),
+      createdAt: now,
+      updatedAt: now,
+      completed: false,
+      tags: parseTags(tagsStr)
+    };
+    state.notes.unshift(note);
+    saveNotes(state.notes);
+    render();
+  }
+
+  function updateNote(id, changes) {
+    var n = state.notes.find(function (x) { return x.id === id; });
+    if (!n) return;
+    Object.assign(n, changes, { updatedAt: new Date().toISOString() });
+    saveNotes(state.notes);
+    render();
+  }
+
+  function deleteNote(id) {
+    var idx = state.notes.findIndex(function (x) { return x.id === id; });
+    if (idx === -1) return;
+    var removed = state.notes[idx];
+    state.notes.splice(idx, 1);
+    saveNotes(state.notes);
+    render();
+    showToast("Note deleted.", "Undo", function () {
+      state.notes.splice(idx, 0, removed);
+      saveNotes(state.notes);
+      render();
+    });
+  }
+
+  function toggleComplete(id) {
+    var n = state.notes.find(function (x) { return x.id === id; });
+    if (!n) return;
+    updateNote(id, { completed: !n.completed });
+  }
+
+  function reorder(fromId, toId) {
+    var arr = state.notes;
+    var fromIdx = arr.findIndex(function (x) { return x.id === fromId; });
+    var toIdx = arr.findIndex(function (x) { return x.id === toId; });
+    if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return;
+    var moved = arr.splice(fromIdx, 1)[0];
+    arr.splice(toIdx, 0, moved);
+    saveNotes(arr);
+    render();
+  }
+
+  // ---- derived / filtering ----
+  function getAllTags() {
+    var counts = {};
+    state.notes.forEach(function (n) {
+      (n.tags || []).forEach(function (t) {
+        counts[t] = (counts[t] || 0) + 1;
+      });
+    });
+    return counts;
+  }
+
+  function isUnfiltered() {
+    return state.filter === "all" && !state.search && !state.activeTag;
+  }
+
+  function visibleNotes() {
+    var q = state.search.trim().toLowerCase();
+    return state.notes.filter(function (n) {
+      if (state.filter === "active" && n.completed) return false;
+      if (state.filter === "completed" && !n.completed) return false;
+      if (state.activeTag && (n.tags || []).indexOf(state.activeTag) === -1) return false;
+      if (q) {
+        var inText = n.text.toLowerCase().indexOf(q) !== -1;
+        var inTags = (n.tags || []).some(function (t) { return t.toLowerCase().indexOf(q) !== -1; });
+        if (!inText && !inTags) return false;
+      }
+      return true;
+    });
+  }
+
+  // ---- render ----
+  var listEl = document.getElementById("list");
+  var emptyEl = document.getElementById("emptyState");
+  var tallyEl = document.getElementById("tally");
+  var tagRowEl = document.getElementById("tagFilterRow");
+  var reorderHintEl = document.getElementById("reorderHint");
+
+  function render() {
+    var visible = visibleNotes();
+    var locked = !isUnfiltered();
+    reorderHintEl.style.display = locked ? "none" : "block";
+
+    // tally
+    var total = state.notes.length;
+    var done = state.notes.filter(function (n) { return n.completed; }).length;
+    tallyEl.textContent = total === 0 ? "" : (done + " of " + total + " done");
+
+    // tag filter chips
+    var tagCounts = getAllTags();
+    var tagKeys = Object.keys(tagCounts).sort();
+    tagRowEl.innerHTML = "";
+    tagKeys.forEach(function (tag) {
+      var chip = document.createElement("button");
+      chip.className = "tag-chip" + (state.activeTag === tag ? " active" : "");
+      chip.innerHTML = escapeHtml(tag) + '<span class="n">' + tagCounts[tag] + "</span>";
+      chip.addEventListener("click", function () {
+        state.activeTag = state.activeTag === tag ? null : tag;
+        render();
+      });
+      tagRowEl.appendChild(chip);
+    });
+
+    // list
+    listEl.innerHTML = "";
+    if (visible.length === 0) {
+      emptyEl.style.display = "block";
+      emptyEl.querySelector(".glyph").textContent = state.notes.length === 0 ? "Nothing here yet" : "No matching notes";
+      emptyEl.querySelector("p").textContent = state.notes.length === 0
+        ? "Write your first note above to get started."
+        : "Try a different search or filter.";
+    } else {
+      emptyEl.style.display = "none";
+    }
+
+    visible.forEach(function (note) {
+      listEl.appendChild(renderNote(note, locked));
+    });
+  }
+
+  function renderNote(note, locked) {
+    var card = document.createElement("div");
+    card.className = "note" + (note.completed ? " completed" : "") + (state.editingId === note.id ? " editing" : "");
+    card.dataset.id = note.id;
+    card.setAttribute("data-locked", locked ? "true" : "false");
+    card.draggable = !locked && state.editingId === null;
+
+    // grip
+    var grip = document.createElement("div");
+    grip.className = "grip";
+    grip.title = "Drag to reorder";
+    grip.innerHTML = '<svg viewBox="0 0 8 16" fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="6" cy="2" r="1.3"/><circle cx="2" cy="8" r="1.3"/><circle cx="6" cy="8" r="1.3"/><circle cx="2" cy="14" r="1.3"/><circle cx="6" cy="14" r="1.3"/></svg>';
+    card.appendChild(grip);
+
+    // check
+    var check = document.createElement("button");
+    check.className = "check-btn";
+    check.setAttribute("aria-label", note.completed ? "Mark as active" : "Mark as complete");
+    check.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    check.addEventListener("click", function () { toggleComplete(note.id); });
+    card.appendChild(check);
+
+    var body = document.createElement("div");
+    body.className = "note-body";
+
+    if (state.editingId === note.id) {
+      var ta = document.createElement("textarea");
+      ta.className = "edit-area";
+      ta.value = note.text;
+      body.appendChild(ta);
+
+      var tagsInput = document.createElement("input");
+      tagsInput.className = "edit-tags";
+      tagsInput.type = "text";
+      tagsInput.placeholder = "tags, comma, separated";
+      tagsInput.value = (note.tags || []).join(", ");
+      body.appendChild(tagsInput);
+
+      var actions = document.createElement("div");
+      actions.className = "edit-actions";
+      var saveBtn = document.createElement("button");
+      saveBtn.className = "btn btn-primary btn-sm";
+      saveBtn.textContent = "Save";
+      saveBtn.addEventListener("click", function () {
+        var newText = ta.value.trim();
+        if (!newText) return;
+        updateNote(note.id, { text: newText, tags: parseTags(tagsInput.value) });
+        state.editingId = null;
+      });
+      var cancelBtn = document.createElement("button");
+      cancelBtn.className = "btn btn-ghost btn-sm";
+      cancelBtn.textContent = "Cancel";
+      cancelBtn.addEventListener("click", function () {
+        state.editingId = null;
+        render();
+      });
+      actions.appendChild(saveBtn);
+      actions.appendChild(cancelBtn);
+      body.appendChild(actions);
+
+      setTimeout(function () { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }, 0);
+    } else {
+      var textEl = document.createElement("p");
+      textEl.className = "note-text";
+      textEl.textContent = note.text;
+      body.appendChild(textEl);
+
+      var meta = document.createElement("div");
+      meta.className = "note-meta";
+
+      var tagsWrap = document.createElement("div");
+      tagsWrap.className = "note-tags";
+      (note.tags || []).forEach(function (t) {
+        var s = document.createElement("span");
+        s.textContent = t;
+        tagsWrap.appendChild(s);
+      });
+      meta.appendChild(tagsWrap);
+
+      var timeEl = document.createElement("span");
+      timeEl.className = "note-time";
+      timeEl.textContent = (note.updatedAt !== note.createdAt ? "Edited " : "Created ") + fmtTime(note.updatedAt !== note.createdAt ? note.updatedAt : note.createdAt);
+      meta.appendChild(timeEl);
+
+      body.appendChild(meta);
+    }
+    card.appendChild(body);
+
+    // actions (edit / delete) or confirm row
+    if (state.editingId !== note.id) {
+      if (state.pendingDeleteId === note.id) {
+        var confirmRow = document.createElement("div");
+        confirmRow.className = "confirm-row";
+        confirmRow.innerHTML = "<span>Delete?</span>";
+        var yes = document.createElement("button");
+        yes.className = "btn btn-danger btn-sm";
+        yes.textContent = "Yes";
+        yes.addEventListener("click", function () {
+          state.pendingDeleteId = null;
+          deleteNote(note.id);
+        });
+        var no = document.createElement("button");
+        no.className = "btn btn-ghost btn-sm";
+        no.textContent = "No";
+        no.addEventListener("click", function () { state.pendingDeleteId = null; render(); });
+        confirmRow.appendChild(yes);
+        confirmRow.appendChild(no);
+        card.appendChild(confirmRow);
+      } else {
+        var actionsWrap = document.createElement("div");
+        actionsWrap.className = "note-actions";
+
+        var editBtn = document.createElement("button");
+        editBtn.className = "icon-btn";
+        editBtn.setAttribute("aria-label", "Edit note");
+        editBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+        editBtn.addEventListener("click", function () { state.editingId = note.id; render(); });
+
+        var delBtn = document.createElement("button");
+        delBtn.className = "icon-btn";
+        delBtn.setAttribute("aria-label", "Delete note");
+        delBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+        delBtn.addEventListener("click", function () { state.pendingDeleteId = note.id; render(); });
+
+        actionsWrap.appendChild(editBtn);
+        actionsWrap.appendChild(delBtn);
+        card.appendChild(actionsWrap);
+      }
+    }
+
+    // drag handlers
+    card.addEventListener("dragstart", function (e) {
+      state.dragId = note.id;
+      card.classList.add("dragging");
+      e.dataTransfer.effectAllowed = "move";
+    });
+    card.addEventListener("dragend", function () {
+      card.classList.remove("dragging");
+      state.dragId = null;
+      Array.prototype.forEach.call(listEl.children, function (c) { c.classList.remove("drag-over"); });
+    });
+    card.addEventListener("dragover", function (e) {
+      if (!state.dragId || locked) return;
+      e.preventDefault();
+      card.classList.add("drag-over");
+    });
+    card.addEventListener("dragleave", function () { card.classList.remove("drag-over"); });
+    card.addEventListener("drop", function (e) {
+      e.preventDefault();
+      card.classList.remove("drag-over");
+      if (state.dragId && state.dragId !== note.id) {
+        reorder(state.dragId, note.id);
+      }
+    });
+
+    return card;
+  }
+
+  // ---- composer ----
+  var noteInput = document.getElementById("noteInput");
+  var tagInput = document.getElementById("tagInput");
+  var addBtn = document.getElementById("addBtn");
+
+  function refreshAddBtn() {
+    addBtn.disabled = noteInput.value.trim().length === 0;
+  }
+  noteInput.addEventListener("input", refreshAddBtn);
+  noteInput.addEventListener("keydown", function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") submitNote();
+  });
+  addBtn.addEventListener("click", submitNote);
+
+  function submitNote() {
+    var text = noteInput.value.trim();
+    if (!text) return;
+    addNote(text, tagInput.value);
+    noteInput.value = "";
+    tagInput.value = "";
+    refreshAddBtn();
+    noteInput.focus();
+  }
+
+  // ---- controls ----
+  document.getElementById("searchInput").addEventListener("input", function (e) {
+    state.search = e.target.value;
+    render();
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".filters button"), function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".filters button").forEach(function (b) { b.classList.remove("active"); });
+      btn.classList.add("active");
+      state.filter = btn.dataset.filter;
+      render();
+    });
+  });
+
+  // ---- import / export ----
+  document.getElementById("exportBtn").addEventListener("click", function () {
+    var blob = new Blob([JSON.stringify(state.notes, null, 2)], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "field-notes-" + new Date().toISOString().slice(0, 10) + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  var importFile = document.getElementById("importFile");
+  document.getElementById("importBtn").addEventListener("click", function () { importFile.click(); });
+  importFile.addEventListener("change", function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var data = JSON.parse(reader.result);
+        if (!Array.isArray(data)) throw new Error("not an array");
+        var cleaned = data.filter(function (n) { return n && typeof n.text === "string"; }).map(function (n) {
+          return {
+            id: n.id || uid(),
+            text: n.text,
+            createdAt: n.createdAt || new Date().toISOString(),
+            updatedAt: n.updatedAt || n.createdAt || new Date().toISOString(),
+            completed: !!n.completed,
+            tags: Array.isArray(n.tags) ? n.tags : []
+          };
+        });
+        var merge = window.confirm("Add " + cleaned.length + " imported note(s) to your existing notes?\n\nChoose Cancel to replace all notes instead.");
+        if (merge) {
+          state.notes = cleaned.concat(state.notes);
+        } else {
+          state.notes = cleaned;
+        }
+        saveNotes(state.notes);
+        render();
+        showToast("Imported " + cleaned.length + " note(s).");
+      } catch (err) {
+        showToast("Couldn't read that file — expected a JSON export from this app.");
+      }
+      importFile.value = "";
+    };
+    reader.readAsText(file);
+  });
+
+  // ---- init ----
+  refreshAddBtn();
+  render();
+})();
+</script>
+</body>
+</html>
