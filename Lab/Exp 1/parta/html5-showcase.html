@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML5 Element Showcase</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-alt: #1e222b;
+    --border: #2a2f3a;
+    --accent: #7dd3fc;
+    --accent2: #a78bfa;
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+    --code-bg: #11131a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+  }
+  header {
+    padding: 2.5rem 1.5rem 2rem;
+    text-align: center;
+    background: linear-gradient(180deg, #1a1e27, var(--bg));
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 {
+    margin: 0 0 .5rem;
+    font-size: 2.2rem;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  header p { color: var(--muted); margin: 0; }
+  nav.toc {
+    max-width: 1100px;
+    margin: 1.5rem auto 0;
+    padding: 1rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  nav.toc ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1rem;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+  }
+  nav.toc a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: .85rem;
+  }
+  nav.toc a:hover { text-decoration: underline; }
+  main {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+  }
+  section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.75rem;
+  }
+  section h2 {
+    margin-top: 0;
+    font-size: 1.3rem;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: .5rem;
+  }
+  section h3 {
+    color: var(--accent2);
+    font-size: 1rem;
+    margin-bottom: .3rem;
+  }
+  .demo {
+    background: var(--panel-alt);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: .5rem 0 1.25rem;
+  }
+  code, pre {
+    background: var(--code-bg);
+    color: #fca5a5;
+    padding: .1rem .4rem;
+    border-radius: 4px;
+    font-size: .85rem;
+  }
+  pre { padding: .75rem; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { border: 1px solid var(--border); padding: .5rem .75rem; text-align: left; }
+  th { background: #22273080; }
+  figure { margin: 0; text-align: center; }
+  figcaption { color: var(--muted); font-size: .8rem; margin-top: .3rem; }
+  input, select, textarea, button, meter, progress {
+    font-family: inherit;
+    font-size: .9rem;
+  }
+  input, select, textarea {
+    background: #0f1219;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: .45rem .6rem;
+    border-radius: 6px;
+  }
+  fieldset {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  button, input[type="submit"], input[type="button"] {
+    background: var(--accent);
+    color: #0f1115;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  button:hover { opacity: .85; }
+  form .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: .9rem;
+  }
+  form label { display: flex; flex-direction: column; gap: .25rem; font-size: .85rem; color: var(--muted); flex: 1 1 200px; }
+  mark { background: var(--accent2); color: #1a1a1a; }
+  kbd { background: #333; border-radius: 4px; padding: .1rem .4rem; border: 1px solid #555; font-size: .8rem; }
+  blockquote {
+    border-left: 3px solid var(--accent);
+    margin: .5rem 0;
+    padding-left: 1rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+  details { background: var(--panel-alt); border-radius: 8px; padding: .6rem 1rem; }
+  summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+  dialog {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--panel);
+    color: var(--text);
+    padding: 1.5rem;
+  }
+  dialog::backdrop { background: rgba(0,0,0,.6); }
+  progress, meter { width: 100%; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+  footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    font-size: .85rem;
+  }
+  a.back-to-top { color: var(--accent); font-size: .75rem; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>HTML5 Element Showcase</h1>
+  <p>A reference catalog demonstrating (almost) every element HTML5 has to offer</p>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <ul>
+    <li><a href="#sectioning">Sectioning</a></li>
+    <li><a href="#text">Text content</a></li>
+    <li><a href="#inline">Inline text</a></li>
+    <li><a href="#forms">Forms</a></li>
+    <li><a href="#tables">Tables</a></li>
+    <li><a href="#media">Media</a></li>
+    <li><a href="#embedded">Embedded/graphics</a></li>
+    <li><a href="#interactive">Interactive</a></li>
+    <li><a href="#scripting">Scripting/meta</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <section id="sectioning">
+    <h2>Sectioning &amp; Document structure</h2>
+    <p><code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code> and <code>&lt;footer&gt;</code> are all in use on this very page. Here are the rest:</p>
+    <div class="demo">
+      <article>
+        <h3>&lt;article&gt;</h3>
+        <p>A self-contained piece of content, like a blog post or news story.</p>
+        <aside>
+          <strong>&lt;aside&gt;</strong> — tangentially related content, like a sidebar note.
+        </aside>
+      </article>
+      <hr>
+      <div><strong>&lt;div&gt;</strong> — a generic block container (this one).</div>
+      <address>
+        <strong>&lt;address&gt;</strong> — contact info: 123 Web Lane, Internet
+      </address>
+    </div>
+  </section>
+
+  <section id="text">
+    <h2>Text content</h2>
+    <div class="demo">
+      <h1 style="font-size:1.1rem">h1 – h6 headings</h1>
+      <h6 style="font-size:.8rem">This is an h6, the smallest heading</h6>
+      <p>A standard <code>&lt;p&gt;</code> paragraph of text.</p>
+      <blockquote cite="https://example.com">
+        &lt;blockquote&gt; — a longer quoted passage, optionally with a <code>cite</code> attribute.
+      </blockquote>
+      <pre><code>&lt;pre&gt;&lt;code&gt; — preformatted code block
+  function hello() { return "hi"; }</code></pre>
+      <ol>
+        <li>&lt;ol&gt; ordered list item one</li>
+        <li>Item two</li>
+      </ol>
+      <ul>
+        <li>&lt;ul&gt; unordered list item</li>
+        <li>Another item</li>
+      </ul>
+      <dl>
+        <dt>&lt;dl&gt;/&lt;dt&gt;/&lt;dd&gt;</dt>
+        <dd>A description list — term and definition pairs.</dd>
+      </dl>
+      <figure>
+        <pre><code>const x = 42;</code></pre>
+        <figcaption>&lt;figure&gt; + &lt;figcaption&gt; — self-contained content with a caption.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="inline">
+    <h2>Inline text semantics</h2>
+    <div class="demo">
+      <p>
+        <a href="#top">&lt;a&gt; link</a> &middot;
+        <strong>&lt;strong&gt; bold importance</strong> &middot;
+        <em>&lt;em&gt; emphasis</em> &middot;
+        <mark>&lt;mark&gt; highlighted</mark> &middot;
+        <small>&lt;small&gt; fine print</small> &middot;
+        <del>&lt;del&gt; deleted</del> &middot;
+        <ins>&lt;ins&gt; inserted</ins>
+      </p>
+      <p>
+        <sub>&lt;sub&gt; subscript</sub> &middot;
+        <sup>&lt;sup&gt; superscript</sup> &middot;
+        H<sub>2</sub>O and E=mc<sup>2</sup>
+      </p>
+      <p>
+        <code>&lt;code&gt; inline code</code> &middot;
+        <kbd>&lt;kbd&gt; Ctrl+C</kbd> &middot;
+        <samp>&lt;samp&gt; sample output</samp> &middot;
+        <var>&lt;var&gt; variable x</var>
+      </p>
+      <p>
+        <abbr title="HyperText Markup Language">&lt;abbr&gt; HTML</abbr> &middot;
+        <cite>&lt;cite&gt; The Great Gatsby</cite> &middot;
+        <q>&lt;q&gt; a short inline quote</q> &middot;
+        <dfn title="a term being defined">&lt;dfn&gt; term</dfn>
+      </p>
+      <p>
+        <time datetime="2026-09-10">&lt;time&gt; September 10, 2026</time> &middot;
+        <span>&lt;span&gt; generic inline wrapper</span> &middot;
+        line<br>break with &lt;br&gt;
+      </p>
+      <p>bdo/bdi: <bdo dir="rtl">&lt;bdo&gt; right-to-left text</bdo> &middot; <bdi>usr_ملك</bdi> &lt;bdi&gt;</p>
+      <p>&lt;wbr&gt;: Supercalifragilistic<wbr>expialidocious (optional break point)</p>
+    </div>
+  </section>
+
+  <section id="forms">
+    <h2>Forms &amp; input types</h2>
+    <div class="demo">
+      <form onsubmit="return false;">
+        <fieldset>
+          <legend>&lt;fieldset&gt; / &lt;legend&gt;</legend>
+          <div class="row">
+            <label>text
+              <input type="text" placeholder="Text input">
+            </label>
+            <label>password
+              <input type="password" placeholder="Password">
+            </label>
+            <label>email
+              <input type="email" placeholder="you@example.com">
+            </label>
+            <label>search
+              <input type="search" placeholder="Search…">
+            </label>
+          </div>
+          <div class="row">
+            <label>number
+              <input type="number" min="0" max="10" value="5">
+            </label>
+            <label>range
+              <input type="range" min="0" max="100" value="30">
+            </label>
+            <label>date
+              <input type="date">
+            </label>
+            <label>time
+              <input type="time">
+            </label>
+          </div>
+          <div class="row">
+            <label>datetime-local
+              <input type="datetime-local">
+            </label>
+            <label>month
+              <input type="month">
+            </label>
+            <label>week
+              <input type="week">
+            </label>
+            <label>color
+              <input type="color" value="#7dd3fc">
+            </label>
+          </div>
+          <div class="row">
+            <label>tel
+              <input type="tel" placeholder="+91 98765 43210">
+            </label>
+            <label>url
+              <input type="url" placeholder="https://example.com">
+            </label>
+            <label>file
+              <input type="file">
+            </label>
+            <label>hidden (invisible)
+              <input type="hidden" value="secret">
+            </label>
+          </div>
+          <div class="row">
+            <label style="flex-direction:row;align-items:center">
+              <input type="checkbox" checked style="width:auto"> checkbox
+            </label>
+            <label style="flex-direction:row;align-items:center">
+              <input type="radio" name="r" style="width:auto"> radio A
+            </label>
+            <label style="flex-direction:row;align-items:center">
+              <input type="radio" name="r" style="width:auto"> radio B
+            </label>
+          </div>
+          <div class="row">
+            <label>select
+              <select>
+                <optgroup label="Group 1">
+                  <option>Option A</option>
+                  <option>Option B</option>
+                </optgroup>
+                <optgroup label="Group 2">
+                  <option>Option C</option>
+                </optgroup>
+              </select>
+            </label>
+            <label>datalist
+              <input list="browsers" placeholder="Type a browser">
+              <datalist id="browsers">
+                <option value="Chrome"></option>
+                <option value="Firefox"></option>
+                <option value="Safari"></option>
+              </datalist>
+            </label>
+            <label>textarea
+              <textarea rows="2" placeholder="Multi-line text"></textarea>
+            </label>
+          </div>
+          <div class="row">
+            <label>output
+              <output name="result" for="a b">42</output>
+            </label>
+            <label>meter (gauge)
+              <meter min="0" max="100" value="70">70/100</meter>
+            </label>
+            <label>progress (bar)
+              <progress value="60" max="100">60%</progress>
+            </label>
+          </div>
+          <button type="submit">&lt;button&gt; submit</button>
+          <input type="reset" value="&lt;input type=reset&gt;">
+        </fieldset>
+      </form>
+    </div>
+  </section>
+
+  <section id="tables">
+    <h2>Tabular data</h2>
+    <div class="demo">
+      <table>
+        <caption>&lt;table&gt; with caption, colgroup, thead/tbody/tfoot</caption>
+        <colgroup>
+          <col style="width:40%">
+          <col>
+          <col>
+        </colgroup>
+        <thead>
+          <tr><th>Element</th><th>Row A</th><th>Row B</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>&lt;tr&gt;/&lt;td&gt;</td><td>Data 1</td><td>Data 2</td></tr>
+          <tr><td>Second row</td><td>Data 3</td><td>Data 4</td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td colspan="3">&lt;tfoot&gt; — footer row spanning all columns</td></tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+
+  <section id="media">
+    <h2>Media elements</h2>
+    <div class="demo grid-2">
+      <div>
+        <h3>&lt;audio&gt;</h3>
+        <audio controls>
+          <source src="missing-audio.mp3" type="audio/mpeg">
+          Your browser doesn't support audio.
+        </audio>
+      </div>
+      <div>
+        <h3>&lt;video&gt; + &lt;track&gt;</h3>
+        <video controls width="100%" style="max-width:260px">
+          <source src="missing-video.mp4" type="video/mp4">
+          <track kind="captions" srclang="en" label="English">
+          Your browser doesn't support video.
+        </video>
+      </div>
+      <div>
+        <h3>&lt;picture&gt; + &lt;img&gt;</h3>
+        <picture>
+          <source media="(min-width:640px)" srcset="https://placehold.co/300x120">
+          <img src="https://placehold.co/150x100" alt="Placeholder image" style="max-width:100%">
+        </picture>
+      </div>
+      <div>
+        <h3>&lt;iframe&gt;</h3>
+        <iframe src="about:blank" title="Embedded frame" style="width:100%;height:100px;border:1px solid var(--border);border-radius:6px"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section id="embedded">
+    <h2>Embedded content &amp; graphics</h2>
+    <div class="demo grid-2">
+      <div>
+        <h3>&lt;canvas&gt;</h3>
+        <canvas id="myCanvas" width="260" height="100" style="background:#0f1219;border-radius:6px;width:100%"></canvas>
+      </div>
+      <div>
+        <h3>&lt;svg&gt;</h3>
+        <svg viewBox="0 0 200 80" width="100%" height="80">
+          <circle cx="40" cy="40" r="30" fill="#7dd3fc"/>
+          <rect x="90" y="10" width="60" height="60" fill="#a78bfa" rx="8"/>
+        </svg>
+      </div>
+      <div>
+        <h3>&lt;embed&gt;</h3>
+        <embed src="https://placehold.co/200x80" type="image/png" style="max-width:100%">
+      </div>
+      <div>
+        <h3>&lt;object&gt;</h3>
+        <object data="https://placehold.co/200x80" type="image/png" style="max-width:100%">Fallback content</object>
+      </div>
+      <div>
+        <h3>&lt;math&gt; (MathML)</h3>
+        <math>
+          <mrow>
+            <msup><mi>x</mi><mn>2</mn></msup>
+            <mo>+</mo>
+            <mi>y</mi>
+          </mrow>
+        </math>
+      </div>
+    </div>
+  </section>
+
+  <section id="interactive">
+    <h2>Interactive elements</h2>
+    <div class="demo">
+      <details>
+        <summary>&lt;details&gt; / &lt;summary&gt; — click to expand</summary>
+        <p>Hidden content revealed on click, no JavaScript required.</p>
+      </details>
+      <br>
+      <button onclick="document.getElementById('demoDialog').showModal()">Open &lt;dialog&gt;</button>
+      <dialog id="demoDialog">
+        <p>This is a native <code>&lt;dialog&gt;</code> modal.</p>
+        <button onclick="document.getElementById('demoDialog').close()">Close</button>
+      </dialog>
+      <br><br>
+      <menu>
+        <li><button type="button">&lt;menu&gt; item 1</button></li>
+        <li><button type="button">&lt;menu&gt; item 2</button></li>
+      </menu>
+    </div>
+  </section>
+
+  <section id="scripting">
+    <h2>Scripting, template &amp; document metadata</h2>
+    <div class="demo">
+      <p><code>&lt;script&gt;</code> — draws on the canvas above and powers the dialog button.</p>
+      <p><code>&lt;noscript&gt;</code> fallback text shows only if JS is disabled.</p>
+      <noscript><p>JavaScript is disabled in your browser.</p></noscript>
+      <template id="tpl">
+        <p>This paragraph lives inside a &lt;template&gt; and is invisible until cloned by JS.</p>
+      </template>
+      <button onclick="const c=document.getElementById('tpl').content.cloneNode(true); document.getElementById('tplTarget').appendChild(c);">Clone &lt;template&gt; content</button>
+      <div id="tplTarget"></div>
+      <p style="color:var(--muted);font-size:.8rem;margin-top:1rem">
+        Not visually demonstrable but present in a full HTML5 document: <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;title&gt;</code>, <code>&lt;meta&gt;</code>, <code>&lt;style&gt;</code>, <code>&lt;link&gt;</code>, <code>&lt;base&gt;</code>.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Built as an HTML5 reference &middot; <a class="back-to-top" href="#top">Back to top</a>
+</footer>
+
+<script>
+  const ctx = document.getElementById('myCanvas').getContext('2d');
+  ctx.fillStyle = '#7dd3fc';
+  ctx.fillRect(10, 10, 80, 80);
+  ctx.fillStyle = '#a78bfa';
+  ctx.beginPath();
+  ctx.arc(180, 50, 40, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#e5e7eb';
+  ctx.font = '14px sans-serif';
+  ctx.fillText('<canvas> drawing', 95, 55);
+</script>
+
+</body>
+</html>
