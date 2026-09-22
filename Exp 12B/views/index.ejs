@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1><%= title %></h1>
+
+    <h2>HTTP is Stateless</h2>
+    <p>
+      Each HTTP request is independent. Sessions and cookies help an
+      application remember information about a user between requests.
+    </p>
+
+    <% if (username) { %>
+      <div class="success">
+        Logged in as <strong><%= username %></strong>
+      </div>
+      <a class="button" href="/profile">Open Profile</a>
+      <a class="button danger" href="/logout">Logout</a>
+    <% } else { %>
+      <a class="button" href="/login">Login</a>
+    <% } %>
+
+    <h2>Cookie Demonstration</h2>
+    <p>Current theme cookie: <strong><%= theme %></strong></p>
+
+    <a class="button" href="/set-cookie">Set Cookie</a>
+    <a class="button" href="/read-cookie">Read Cookie</a>
+    <a class="button danger" href="/delete-cookie">Delete Cookie</a>
+
+    <h2>Concepts Demonstrated</h2>
+    <ul>
+      <li>HTTP statelessness</li>
+      <li>Cookies using cookie-parser</li>
+      <li>Sessions using express-session</li>
+      <li>Login and logout</li>
+      <li>Protected routes</li>
+      <li>Session-based visit counter</li>
+    </ul>
+
+    <h2>Demo Credentials</h2>
+    <p>Username: <code>deepak</code></p>
+    <p>Password: <code>12345</code></p>
+  </div>
+</body>
+</html>
