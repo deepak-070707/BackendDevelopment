@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Experiment 12B</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container small">
+    <h1>Welcome, <%= username %>!</h1>
+
+    <div class="success">
+      Your session is active.
+    </div>
+
+    <p>
+      This profile is protected using <strong>express-session</strong>.
+    </p>
+
+    <p>
+      Number of profile visits in this session:
+      <strong><%= visitCount %></strong>
+    </p>
+
+    <a class="button" href="/">Home</a>
+    <a class="button danger" href="/logout">Logout</a>
+  </div>
+</body>
+</html>
