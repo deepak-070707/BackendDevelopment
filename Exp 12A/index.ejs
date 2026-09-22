@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1><%= title %></h1>
+
+    <p>
+      This application demonstrates Node.js, Express.js, REST APIs,
+      URL parameters, POST data, EJS templating and Nodemon.
+    </p>
+
+    <h2>Add Student</h2>
+    <form action="/students" method="POST">
+      <input type="text" name="name" placeholder="Student name" required>
+      <input type="text" name="course" placeholder="Course" required>
+      <button type="submit">Add Student</button>
+    </form>
+
+    <h2>Student List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Course</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% students.forEach(student => { %>
+          <tr>
+            <td><%= student.id %></td>
+            <td><%= student.name %></td>
+            <td><%= student.course %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <h2>API Endpoints</h2>
+    <ul>
+      <li>GET <code>/api/students</code> - Get all students</li>
+      <li>GET <code>/api/students/1</code> - Get student by ID</li>
+      <li>GET <code>/student/1</code> - URL parameter example</li>
+      <li>POST <code>/api/students</code> - Add a student using JSON</li>
+    </ul>
+  </div>
+</body>
+</html>
